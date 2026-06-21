@@ -266,7 +266,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         items: [
           { name: "Calamari alla Griglia", nameEN: "Grilled Squid", description: "Calamari freschi cotti alla griglia", descriptionEN: "Fresh squid grilled to perfection", price: 13, available: true, allergens: ["molluschi"] },
           { name: "Fritto Misto", nameEN: "Mixed Fried Seafood", description: "Calamari e gamberi fritti", descriptionEN: "Fried squid and shrimp", price: 12, available: true, allergens: ["glutine", "molluschi", "crostacei"] },
-          { name: "Fritto di Paranza", nameEN: "Mixed Small Fish Fry", description: "Pesce misto fritto (non sempre disponibile)", descriptionEN: "Mixed fried local fish (not always available)", price: 14, available: false, allergens: ["pesce", "glutine"] },
+          { name: "Fritto di Paranza", nameEN: "Mixed Small Fish Fry", description: "Pesce misto fritto (non sempre disponibile)", descriptionEN: "Mixed fried local fish (not always available)", price: 14, available: true, allergens: ["pesce", "glutine"] },
           { name: "Gamberoni Arrosto", nameEN: "Grilled King Prawns", frozen: true, description: "Gamberoni cotti alla brace", descriptionEN: "King prawns grilled over charcoal", price: 15, available: true, allergens: ["crostacei"] },
           { name: "Grigliata Mista di Pesce", nameEN: "Mixed Fish Grill", description: "Pesce spada, gamberi e seppie", descriptionEN: "Swordfish, prawns and cuttlefish", price: 16.5, available: true, allergens: ["pesce", "crostacei", "molluschi"] },
           { name: "Seppie alla Griglia", nameEN: "Grilled Cuttlefish", frozen: true, description: "Seppie fresche alla griglia", descriptionEN: "Fresh grilled cuttlefish", price: 11.5, available: true, allergens: ["molluschi"] },
