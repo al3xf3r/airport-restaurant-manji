@@ -1,7 +1,7 @@
 "use client";
-import { MENU_CATEGORIES, Lang, Allergen, ALLERGEN_LABELS } from "@/data/menu";
+import { MenuCategory, Lang, Allergen, ALLERGEN_LABELS } from "@/data/menu";
 
-interface CategoryViewProps { slug: string; lang: Lang; }
+interface CategoryViewProps { category: MenuCategory; lang: Lang; }
 
 function fmtPrice(p: number) { return p.toFixed(2).replace(".", ",") + " €"; }
 
@@ -21,16 +21,13 @@ function AllergenBadge({ allergen, lang }: { allergen: Allergen; lang: Lang }) {
   );
 }
 
-export default function CategoryView({ slug, lang }: CategoryViewProps) {
-  const cat = MENU_CATEGORIES.find((c) => c.slug === slug);
-  if (!cat) return null;
-  const catName = lang === "it" ? cat.nameIT : cat.nameEN;
+export default function CategoryView({ category, lang }: CategoryViewProps) {
+  const catName = lang === "it" ? category.nameIT : category.nameEN;
 
   return (
     <div style={{ maxWidth: 480, margin: "0 auto", padding: "20px 16px 100px", background: "#FAF6F0", minHeight: "100%" }}>
-      {/* Hero */}
       <div style={{ borderRadius: 18, overflow: "hidden", position: "relative", height: 160, marginBottom: 24 }}>
-        <img src={cat.image} alt={catName} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        <img src={category.image} alt={catName} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(27,58,107,0.82) 0%, rgba(27,58,107,0.25) 60%, transparent 100%)" }} />
         <div style={{ position: "absolute", bottom: 14, left: 16, right: 16 }}>
           <h2 style={{
@@ -43,12 +40,11 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
         </div>
       </div>
 
-      {/* Gruppi */}
-      {cat.groups.map((group, gi) => {
+      {category.groups.map((group, gi) => {
         const groupName = lang === "it" ? group.name : (group.nameEN || group.name);
         return (
           <div key={gi} style={{ marginBottom: 8 }}>
-            {cat.groups.length > 1 && (
+            {category.groups.length > 1 && (
               <h3 style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: "1.45rem", fontWeight: 700,
@@ -110,7 +106,7 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
                         )}
                         {allergens.length > 0 && (
                           <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: (desc || item.frozen) ? 0 : 4 }}>
-                            {allergens.map((a) => <AllergenBadge key={a} allergen={a} lang={lang} />)}
+                            {allergens.map((a) => <AllergenBadge key={a} allergen={a as Allergen} lang={lang} />)}
                           </div>
                         )}
                       </div>
@@ -133,7 +129,6 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
         );
       })}
 
-      {/* Note legali */}
       <div style={{ marginTop: 32 }}>
         <p style={{ fontFamily: "'Jost', sans-serif", fontSize: "0.78rem", color: "#999", lineHeight: 1.5, fontWeight: 300, marginBottom: 6 }}>
           {lang === "it"
@@ -142,8 +137,8 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
         </p>
         <p style={{ fontFamily: "'Jost', sans-serif", fontSize: "0.78rem", color: "#999", lineHeight: 1.5, fontWeight: 300 }}>
           {lang === "it"
-            ? "I prodotti contrassegnati con ❄ sono ottenuti da prodotti congelati o surgelati."
-            : "Products marked with ❄ are obtained from frozen products."}
+            ? "I prodotti contrassegnati con l'icona surgelato sono ottenuti da prodotti congelati o surgelati."
+            : "Products marked with the frozen icon are obtained from frozen products."}
         </p>
       </div>
     </div>

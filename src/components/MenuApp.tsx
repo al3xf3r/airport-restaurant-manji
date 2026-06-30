@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Lang, MENU_CATEGORIES, MenuCategory } from "@/data/menu";
+import { Lang, MenuCategory } from "@/data/menu";
 import IntroLoader from "./IntroLoader";
 import TopBar from "./TopBar";
 import HomeView from "./HomeView";
@@ -10,7 +10,11 @@ import Footer from "./Footer";
 
 const SESSION_KEY = "airport_seen";
 
-export default function MenuApp() {
+interface MenuAppProps {
+  initialCategories: MenuCategory[];
+}
+
+export default function MenuApp({ initialCategories }: MenuAppProps) {
   const [lang, setLang] = useState<Lang>("it");
   const [activeCat, setActiveCat] = useState<MenuCategory | null>(null);
   const [showIntro, setShowIntro] = useState<boolean | null>(null);
@@ -33,7 +37,7 @@ export default function MenuApp() {
   }, [activeCat]);
 
   const openCategory = (slug: string) => {
-    const cat = MENU_CATEGORIES.find((c) => c.slug === slug) ?? null;
+    const cat = initialCategories.find((c) => c.slug === slug) ?? null;
     if (!cat) return;
     window.history.pushState({ slug }, "");
     setActiveCat(cat);
@@ -53,24 +57,34 @@ export default function MenuApp() {
   return (
     <>
       {showIntro === true && <IntroLoader onDone={handleIntroComplete} />}
+
       <div style={{
         opacity: showIntro === false ? 1 : 0,
         transition: showIntro === false ? "opacity 0.4s ease" : "none",
         pointerEvents: showIntro === false ? "auto" : "none",
-        minHeight: "100dvh", display: "flex", flexDirection: "column",
+        minHeight: "100dvh",
+        display: "flex",
+        flexDirection: "column",
       }}>
         {searchOpen && (
-          <SearchOverlay lang={lang} onClose={() => setSearchOpen(false)}
-            onSelectCategory={(slug) => { setSearchOpen(false); openCategory(slug); }} />
+          <SearchOverlay
+            lang={lang}
+            categories={initialCategories}
+            onClose={() => setSearchOpen(false)}
+            onSelectCategory={(slug) => { setSearchOpen(false); openCategory(slug); }}
+          />
         )}
-        <TopBar lang={lang} onLangChange={setLang}
+        <TopBar
+          lang={lang}
+          onLangChange={setLang}
           onBack={activeCat ? goHome : undefined}
           onSearchOpen={() => setSearchOpen(true)}
-          title={catName} />
+          title={catName}
+        />
         <main style={{ flex: 1 }}>
           {activeCat
-            ? <CategoryView slug={activeCat.slug} lang={lang} />
-            : <HomeView lang={lang} onSelectCategory={openCategory} />}
+            ? <CategoryView category={activeCat} lang={lang} />
+            : <HomeView lang={lang} categories={initialCategories} onSelectCategory={openCategory} />}
         </main>
         <Footer lang={lang} />
       </div>
